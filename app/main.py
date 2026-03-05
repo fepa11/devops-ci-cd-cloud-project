@@ -4,6 +4,9 @@ from flask import Flask, request, jsonify, render_template
 import sqlite3
 
 app = Flask(__name__)
+app = Flask(__name__)
+CORS(app)
+
 
 def init_db():
     conn = sqlite3.connect("tasks.db")

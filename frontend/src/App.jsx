@@ -1,57 +1,107 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
+import "./App.css"
 
 function App() {
-  const [tasks, setTasks] = useState([]);
-  const [newTask, setNewTask] = useState("");
 
-  const API_URL = "http://localhost:5000";
+  const [tasks, setTasks] = useState([])
+  const [title, setTitle] = useState("")
 
   useEffect(() => {
-    fetchTasks();
-  }, []);
+    fetchTasks()
+  }, [])
 
-  async function fetchTasks() {
-    const response = await fetch(`${API_URL}/tasks`);
-    const data = await response.json();
-    setTasks(data);
+  const fetchTasks = async () => {
+    const res = await fetch("http://localhost:5000/tasks")
+    const data = await res.json()
+    setTasks(data)
   }
 
-  async function addTask() {
-    if (!newTask.trim()) return;
+  const addTask = async () => {
+    if (!title) return
 
-    await fetch(`${API_URL}/tasks`, {
+    await fetch("http://localhost:5000/tasks", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: newTask })
-    });
+      body: JSON.stringify({ title })
+    })
 
-    setNewTask("");
-    fetchTasks();
+    setTitle("")
+    fetchTasks()
   }
 
   return (
-    <div style={{ padding: "40px", fontFamily: "Arial" }}>
-      <h1>DevOps Task Dashboard 🚀</h1>
+    <div className="container">
 
-      <div style={{ marginBottom: "20px" }}>
-        <input
-          value={newTask}
-          onChange={(e) => setNewTask(e.target.value)}
-          placeholder="Nova tarefa"
-          style={{ padding: "8px", marginRight: "10px" }}
-        />
-        <button onClick={addTask}>Adicionar</button>
-      </div>
+      <header>
+        <h1>Felipe Alves Muniz</h1>
+        <p>DevOps Engineer | Cloud | CI/CD | Containers</p>
+      </header>
 
-      <h3>Total de tarefas: {tasks.length}</h3>
+      <section className="stats">
 
-      <ul>
-        {tasks.map((task) => (
-          <li key={task.id}>{task.title}</li>
-        ))}
-      </ul>
+        <div className="card">
+          <h3>Deployments</h3>
+          <p>12</p>
+        </div>
+
+        <div className="card">
+          <h3>Pipelines</h3>
+          <p>5</p>
+        </div>
+
+        <div className="card">
+          <h3>Containers</h3>
+          <p>8</p>
+        </div>
+
+        <div className="card">
+          <h3>Builds</h3>
+          <p>23</p>
+        </div>
+
+      </section>
+
+      <section className="task-box">
+
+        <h2>DevOps Task Manager</h2>
+
+        <div className="task-input">
+          <input
+            placeholder="Nova tarefa"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+
+          <button onClick={addTask}>Adicionar</button>
+        </div>
+
+        <p>Total de tarefas: {tasks.length}</p>
+
+        <ul>
+          {tasks.map(task => (
+            <li key={task.id}>{task.title}</li>
+          ))}
+        </ul>
+
+      </section>
+
+      <footer>
+
+        <a href="https://github.com/fepa11" target="_blank">
+          GitHub
+        </a>
+
+        <a
+          href="https://www.linkedin.com/in/felipe-alves-muniz"
+          target="_blank"
+        >
+          LinkedIn
+        </a>
+
+      </footer>
+
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
